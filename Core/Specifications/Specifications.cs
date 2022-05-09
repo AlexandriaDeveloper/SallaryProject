@@ -18,7 +18,7 @@ namespace Core.Specifications
             this.Criteria = criteria;
         }
         public Expression<Func<T, bool>> Criteria { get; }
-        public List<Expression<Func<T, bool>>> Criterias { get; }
+        public List<Expression<Func<T, bool>>> Criteries { get; } = new List<Expression<Func<T, bool>>>();
         public List<Expression<Func<T, object>>> Includes { get; } = new List<Expression<Func<T, object>>>();
 
         public Expression<Func<T, object>> OrderBy { get; private set; }
@@ -30,6 +30,15 @@ namespace Core.Specifications
         public int Skip { get; private set; }
 
         public bool IsPagingEnabled { get; private set; }
+
+        protected void AddInclude(Expression<Func<T, object>> includeExpression)
+        {
+            Includes.Add(includeExpression);
+        }
+        protected void AddCriteries(Expression<Func<T, bool>> crtieriaExpression)
+        {
+            Criteries.Add(crtieriaExpression);
+        }
 
         protected void AddOrderBy(Expression<Func<T, object>> orederByExpression)
         {

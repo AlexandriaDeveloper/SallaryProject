@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Helper;
 using Core.Interfaces;
+using Core.Specifications;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,7 +39,8 @@ namespace API
                 opt.UseSqlServer(_conf.GetConnectionString("Default"));
             });
             services.AddScoped<IUOW, UOW>();
-
+            // services.AddTransient<IParam, Param>();
+            // services.AddTransient ( typeof(ISpecifications<>),  typeof(Specifications<>) );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });

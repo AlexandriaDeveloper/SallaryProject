@@ -2,11 +2,6 @@
 
 namespace Core.Specifications
 {
-    public interface IParam
-    {
-        int PageIndex { get; set; }
-        int PageSize { get; set; }
-    }
 
     public class Param : IParam
     {
@@ -20,9 +15,15 @@ namespace Core.Specifications
             set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
         }
 
+        public bool IsPaginationEnable { get; set; } = true;
+        public Param()
+        {
+
+        }
+
 
 
     }
 
-    public class EmployeeParam : Param { }
+
 }

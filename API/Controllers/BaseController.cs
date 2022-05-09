@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Core;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using API.Helper;
 using System;
+using Core.Specifications;
 
 namespace API.Controllers
 {
@@ -21,21 +21,30 @@ namespace API.Controllers
             this._uow = uow;
         }
         [HttpGet()]
-        public virtual async Task<List<dto>> Get()
+        public virtual async Task<ActionResult<List<dto>>> Get()
         {
-            var result = await _uow.Repository<entity>().GetAllAsync();
 
+            var result = await _uow.Repository<entity>().GetAllAsync(null);
 
-            return result.EvaluateModelToDto<List<entity>, List<dto>>();
+            if (result == null)
+            {
+                return BadRequest();
+            }
+            return Ok(result.EvaluateModelToDto<List<entity>, List<dto>>());
         }
 
+
+
+
         [HttpGet("{id}")]
-        public virtual async Task<dto> Get(Guid id)
+        public virtual async Task<dto> Get(Guid id, ISpecifications<entity> spec)
         {
-            entity emp = await _uow.Repository<entity>().GetAsync(id);
+            entity result = null;
+            if (spec == null)
+                result = await _uow.Repository<entity>().GetAsync(id);
 
 
-            return emp.EvaluateModelToDto<entity, dto>();
+            return result.EvaluateModelToDto<entity, dto>();
         }
 
         [HttpPost]
@@ -78,5 +87,7 @@ namespace API.Controllers
             await _uow.Complete();
             return Ok();
         }
+
+    
     }
 }
